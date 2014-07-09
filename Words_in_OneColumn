@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+class Program
+{
+    static void Main()
+    {
+        //The program reads the content of a text file and write its words into one column in a new file.
+
+        List<string> TextList = new List<string>();//List to store the clear content
+        string Content = ""; //String to stote file content
+
+        //String delimiter characters 
+        char[] separator = new char[] { ' ', '?', '!', '.', '(', ')', '=', ',', ':', ';', '#', '&', '-', '+', '`', '~', '"', '*', '_', '—' };
+
+        //When it is only a file name, then the file should be in the bin directory. Otherwise it should be written the full path to the file.
+        //Windows-1251  is  character encoding, designed to cover languages that use the Cyrillic script such as  Bulgarian language and other languages.
+        StreamReader reader = new StreamReader("podIgoto.txt", Encoding.GetEncoding("Windows-1251"));
+        using (reader)
+        {
+            Content = reader.ReadToEnd();//Reads the whole file
+            string[] text = Content.Split(separator);//Split separates strings by delimiter characters.
+            foreach (var item in text)
+            {
+                if (item != "")
+                {
+                    TextList.Add(item); //Add the substring to the list. 
+                }
+
+            }
+
+
+            StreamWriter writeOutputFile = new StreamWriter("text.txt");//Write the words in a new file, called "text.txt"(in bin folder).
+            writeOutputFile.WriteLine("Word");//Insert new line "Word"- the name of the column
+
+            //Write the contents from our List by replacing the original file content
+            using (writeOutputFile)
+            {
+                foreach (string line in TextList)
+                {
+                    //ToLower() makes all letters small.
+                    writeOutputFile.WriteLine(line.ToLower());
+                }
+            }
+        }
+    }
+}
